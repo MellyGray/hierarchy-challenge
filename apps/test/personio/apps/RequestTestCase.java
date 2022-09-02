@@ -36,27 +36,21 @@ public abstract class RequestTestCase {
             .andExpect(status().is(expectedStatusCode))
             .andExpect(response);
     }
-
+    
     protected void assertRequestWithBody(
         String method,
         String endpoint,
         String body,
-        Integer expectedStatusCode
+        Integer expectedStatusCode,
+        String expectedResponse
     ) throws Exception {
+        ResultMatcher response = expectedResponse.isEmpty()
+            ? content().string("")
+            : content().json(expectedResponse);
+
         mockMvc
             .perform(request(HttpMethod.valueOf(method), endpoint).content(body).contentType(APPLICATION_JSON))
             .andExpect(status().is(expectedStatusCode))
-            .andExpect(content().string(""));
-    }
-
-    protected void assertRequest(
-        String method,
-        String endpoint,
-        Integer expectedStatusCode
-    ) throws Exception {
-        mockMvc
-            .perform(request(HttpMethod.valueOf(method), endpoint))
-            .andExpect(status().is(expectedStatusCode))
-            .andExpect(content().string(""));
+            .andExpect(response);
     }
 }

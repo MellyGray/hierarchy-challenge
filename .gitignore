@@ -14,9 +14,3 @@ gradle-app.setting
 # Some logs
 var/log/*
 !var/log/.gitkeep
-
-# Ignore unfinished contexts
-apps/main/personio/apps/company/controller/hierarchy/*
-apps/test/personio/apps/company/controller/hierarchy/*
-src/company/main/personio/company/hierarchy/*
-src/company/test/personio/company/hierarchy/*
