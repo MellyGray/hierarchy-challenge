@@ -1,0 +1,4 @@
+rootProject.name = 'personio-challenge'
+
+include ':company'
+project(':company').projectDir = new File('src/company')

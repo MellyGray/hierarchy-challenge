@@ -1,0 +1,125 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.4.0.2513"
+  }
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot' 
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.sonarqube'
+    
+    sourceCompatibility = 17
+    targetCompatibility = 17
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.apache.logging.log4j:log4j-core:2.17.0'
+        implementation 'com.vlkan.log4j2:log4j2-logstash-layout:1.0.5'
+
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testImplementation 'org.mockito:mockito-core:4.5.1'
+        testImplementation ('com.github.javafaker:javafaker:1.0.2') { exclude module: 'snakeyaml' }
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    }
+
+    test {
+        useJUnitPlatform()
+
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+
+    task view_paths {
+        doLast { task ->
+        println "$task.project.name"
+        println "------------------"
+        println "Main: $sourceSets.main.java.srcDirTrees"
+        println "   Resources: $sourceSets.main.resources.srcDirTrees"
+        println "Tests: $sourceSets.test.java.srcDirTrees"
+        println "   Resources: $sourceSets.test.resources.srcDirTrees"
+        }
+    }
+}
+
+subprojects {
+    group = "personio.${rootProject.name}"
+
+    sourceSets {
+        main {
+            java { srcDirs = ['main']}
+            resources { srcDirs = ['main/resources']}
+        }
+        test {
+            java { srcDirs = ['test']}
+            resources { srcDirs = ['test/resources']}
+        }
+    } 
+
+    repositories {
+        mavenCentral()
+    }  
+
+    dependencies {
+        implementation ("org.springframework.boot:spring-boot-starter-web")
+        
+        testImplementation rootProject.sourceSets.main.output
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+    }
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:2.7.1')
+    }
+}
+
+sourceSets {
+  main {
+    java { srcDirs = ['apps/main'] }
+    resources { srcDirs = ['apps/main/resources'] }
+  }
+
+  test {
+    java { srcDirs = ['apps/test'] }
+    resources { srcDirs = ['apps/test/resources'] }
+  }
+}
+
+apply plugin: 'application'
+mainClassName = 'personio.apps.Starter'
+
+bootJar {
+  archiveBaseName = 'personio-challenge'
+  archiveVersion = '0.0.1'
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    
+    implementation project(":company")
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
