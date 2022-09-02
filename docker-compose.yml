@@ -1,0 +1,13 @@
+services:
+  java:
+    container_name: personio-challenge
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    platform: linux/amd64
+    ports:
+      - "8030:8080"
+    volumes:
+      - .:/app:delegated
+    tty: true

@@ -16,3 +16,15 @@ run:
 .PHONY: test
 test:
 	@./gradlew test
+
+.PHONY: up
+up:
+	@docker-compose up -d
+
+.PHONY: docker-run
+run:
+	@docker exec personio-challenge ./gradlew :run --warning-mode all
+
+.PHONY: docker-test
+up:
+	@docker exec personio-challenge ./gradlew test --warning-mode all
