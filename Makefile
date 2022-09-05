@@ -22,9 +22,9 @@ up:
 	@docker-compose up -d
 
 .PHONY: docker-run
-run:
+docker-run:
 	@docker exec personio-challenge ./gradlew :run --warning-mode all
 
 .PHONY: docker-test
-up:
+docker-test:
 	@docker exec personio-challenge ./gradlew test --warning-mode all
