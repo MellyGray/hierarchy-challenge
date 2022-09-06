@@ -25,4 +25,15 @@ class HierarchiesPostControllerTest extends RequestTestCase {
                 "{\"Jonas\": {\"Sophie\": {\"Nick\": {\"Pete\": {},\"Barbara\": {}}}}}"
         );
     }
+
+    @Test
+    void create_new_hierarchy_duplicated_information_json() throws Exception {
+        assertRequestWithBody(
+                "POST",
+                "/hierarchies",
+                "{\"Sophie\":\"Jonas\",\"Barbara\":\"Nick\",\"Pete\":\"Nick\",\"Nick\":\"Sophie\",\"Pete\":\"Nick\",\"Barbara\":\"Nick\"}",
+                201,
+                "{\"Jonas\": {\"Sophie\": {\"Nick\": {\"Pete\": {},\"Barbara\": {}}}}}"
+        );
+    }
 }

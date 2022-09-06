@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class Hierarchy {
     private Employee employee;
@@ -43,12 +41,26 @@ public final class Hierarchy {
     }
 
     public Hierarchy addSubordinate(Employee subordinate) {
-        Hierarchy hierarchy = new Hierarchy(subordinate);
+        Hierarchy hierarchy = getSubordinate(subordinate);
         subordinates.add(hierarchy);
         hierarchy.supervisor = this;
         hierarchy.locate = this.locate;
         locate.put(subordinate, hierarchy);
         return hierarchy;
+    }
+
+    private Hierarchy getSubordinate(Employee subordinate) {
+        if (locate.containsKey(subordinate)) {
+            Hierarchy supervisorHierarchy = locate.get(subordinate);
+            supervisorHierarchy.removeSupervisorRelationship();
+            locate.remove(subordinate);
+            return supervisorHierarchy;
+        }
+        return new Hierarchy(subordinate);
+    }
+
+    private void removeSupervisorRelationship() {
+        this.supervisor.subordinates().remove(this);
     }
 
     public Hierarchy setAsSupervisor(Employee supervisorRoot) {

@@ -5,7 +5,6 @@ import personio.company.hierarchies.domain.Employee;
 import personio.company.hierarchies.domain.Hierarchy;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,21 +13,31 @@ import org.springframework.stereotype.Service;
 public final class HierarchyCreator {
 
     public ResponseHierarchyDTO create(CreateHierarchyDTO request) {
-        Employee firstEmployee = new Employee(getFirstEmployeeName(request.employeeSupervisorList()));
+        Hierarchy hierarchy = createHierarchyFromEmployeeSupervisorList(
+            request.employeeSupervisorList()
+        );
+
+        return new ResponseHierarchyDTO(hierarchy.toString());
+    }
+
+    private Hierarchy createHierarchyFromEmployeeSupervisorList(Map<String, String> employeeSupervisorList){
+        Employee firstEmployee = new Employee(getFirstEmployeeName(employeeSupervisorList));
         Hierarchy hierarchy = new Hierarchy(firstEmployee);
 
-        for (var employeeSupervisor : request.employeeSupervisorList().entrySet()) {
+        for (var employeeSupervisor : employeeSupervisorList.entrySet()) {
             Employee employee = new Employee(employeeSupervisor.getKey());
             Employee supervisor = new Employee(employeeSupervisor.getValue());
-
-            if (Objects.equals(hierarchy.employee().name(), employee.name())) {
-                 hierarchy = hierarchy.setAsSupervisor(supervisor);
+            
+            if (hierarchy.hierarchy(supervisor) != null) {
+                hierarchy.hierarchy(supervisor).addSubordinate(employee);
+            } else if (hierarchy.hierarchy(employee) != null) {
+                hierarchy = hierarchy.hierarchy(employee).setAsSupervisor(supervisor);
             } else {
                 hierarchy.addSubordinate(supervisor, employee);
             }
         }
 
-        return new ResponseHierarchyDTO(hierarchy.toString());
+        return hierarchy;
     }
 
     private String getFirstEmployeeName(Map<String, String> employeeSupervisorList) throws RuntimeException { // TODO - Handle exception

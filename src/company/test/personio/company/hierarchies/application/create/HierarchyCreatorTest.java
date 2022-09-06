@@ -31,6 +31,8 @@ public final class HierarchyCreatorTest {
 
         ResponseHierarchyDTO response = creator.create(request);
 
-        assertEquals("{\"Jonas\": {\"Sophie\": {\"Nick\": {\"Pete\": {},\"Barbara\": {}}}}}", response.hierarchy());
+        assertEquals("{\"Jonas\":{\"Sophie\":{\"Nick\":{\"Pete\":{},\"Barbara\":{}}}}}",
+                response.hierarchy().replaceAll("\\s+", "")
+        );
     }
 }
