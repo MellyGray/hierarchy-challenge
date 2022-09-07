@@ -37,6 +37,22 @@ public abstract class RequestTestCase {
             .andExpect(response);
     }
     
+    protected void assertRequest(
+        String method,
+        String endpoint,
+        Integer expectedStatusCode,
+        String expectedResponse
+    ) throws Exception {
+        ResultMatcher response = expectedResponse.isEmpty()
+            ? content().string("")
+            : content().json(expectedResponse);
+
+        mockMvc
+            .perform(request(HttpMethod.valueOf(method), endpoint))
+            .andExpect(status().is(expectedStatusCode))
+            .andExpect(response);
+    }
+
     protected void assertRequestWithBody(
         String method,
         String endpoint,

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import personio.company.employees.domain.Employee;
+
 
 public final class Hierarchy {
     private Employee employee;

@@ -1,10 +1,9 @@
-package personio.company.hierarchies.domain;
+package personio.company.hierarchies.application.find;
 
-
-public final class Employee {
+public final class FindHierarchyDTO {
     private String name;
 
-    public Employee(String name) {
+    public FindHierarchyDTO(String name) {
         this.name = name;
     }
 
@@ -28,7 +27,7 @@ public final class Employee {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Employee other = (Employee) obj;
+        FindHierarchyDTO other = (FindHierarchyDTO) obj;
         if (name == null) {
             if (other.name != null)
                 return false;

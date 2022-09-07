@@ -1,7 +1,8 @@
 package personio.company.hierarchies.application.create;
 
+import personio.company.employees.domain.Employee;
+import personio.company.employees.domain.EmployeeName;
 import personio.company.hierarchies.application.ResponseHierarchyDTO;
-import personio.company.hierarchies.domain.Employee;
 import personio.company.hierarchies.domain.Hierarchy;
 
 import java.util.Map;
@@ -21,13 +22,13 @@ public final class HierarchyCreator {
     }
 
     private Hierarchy createHierarchyFromEmployeeSupervisorList(Map<String, String> employeeSupervisorList){
-        Employee firstEmployee = new Employee(getFirstEmployeeName(employeeSupervisorList));
+        Employee firstEmployee = new Employee(new EmployeeName(getFirstEmployeeName(employeeSupervisorList)));
         Hierarchy hierarchy = new Hierarchy(firstEmployee);
 
         for (var employeeSupervisor : employeeSupervisorList.entrySet()) {
-            Employee employee = new Employee(employeeSupervisor.getKey());
-            Employee supervisor = new Employee(employeeSupervisor.getValue());
-            
+            Employee employee = new Employee(new EmployeeName(employeeSupervisor.getKey()));
+            Employee supervisor = new Employee(new EmployeeName(employeeSupervisor.getValue()));
+
             if (hierarchy.hierarchy(supervisor) != null) {
                 hierarchy.hierarchy(supervisor).addSubordinate(employee);
             } else if (hierarchy.hierarchy(employee) != null) {
