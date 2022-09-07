@@ -1,6 +1,5 @@
 package personio.company.hierarchies.application.find;
 
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -20,14 +19,14 @@ public final class HierarchyFinder {
     }
 
     public ResponseHierarchyDTO find(FindHierarchyDTO request) {
-        Optional<Employee> employee = repository.searchByName(new EmployeeName(request.name()));
-        
-        if (employee.isPresent()) {
-            Hierarchy hierarchy = new Hierarchy(employee.get()); // TODO - Get supervisor and supervisorSupervisor
-            
-            return new ResponseHierarchyDTO(hierarchy.toString());
-        }
+        Employee employee = repository.searchByName(new EmployeeName(request.name()));
+        Employee supervisor = repository.search(employee.supervisorId());
+        Employee supervisorSupervisor = repository.search(supervisor.supervisorId());
 
-        throw new RuntimeException("The employee does not exist."); // TODO - Custom error
+        Hierarchy hierarchy = new Hierarchy(supervisor);
+        hierarchy.addSubordinate(employee);
+        hierarchy = hierarchy.setAsSupervisor(supervisorSupervisor);
+        
+        return new ResponseHierarchyDTO(hierarchy.toString());
     }
 }

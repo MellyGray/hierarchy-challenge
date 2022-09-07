@@ -9,7 +9,7 @@ public final class HierarchiesGetControllerTest extends RequestTestCase {
     void get_hierarchy_by_name() throws Exception {
         assertRequest(
                     "GET",
-                    "/hierarchies?name=Nick&direction=supervisors",
+                    "/hierarchies?name=Nick",
                     200,
                     "{\"Jonas\": {\"Sophie\": {\"Nick\": {}}}}"
             );
