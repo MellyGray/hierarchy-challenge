@@ -1,6 +1,10 @@
 package personio.company.hierarchies.application.create;
 
+import personio.company.employees.application.EmployeeResponseDTO;
+import personio.company.employees.application.create.CreateEmployeeDTO;
+import personio.company.employees.application.create.EmployeeCreator;
 import personio.company.employees.domain.Employee;
+import personio.company.employees.domain.EmployeeId;
 import personio.company.employees.domain.EmployeeName;
 import personio.company.hierarchies.application.ResponseHierarchyDTO;
 import personio.company.hierarchies.domain.Hierarchy;
@@ -12,16 +16,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public final class HierarchyCreator {
+    private EmployeeCreator employeeCreator;
+
+    public HierarchyCreator(EmployeeCreator employeeCreator){
+        this.employeeCreator = employeeCreator;
+    }
 
     public ResponseHierarchyDTO create(CreateHierarchyDTO request) {
-        Hierarchy hierarchy = createHierarchyFromEmployeeSupervisorList(
-            request.employeeSupervisorList()
+        Hierarchy hierarchy = createFromEmployeeSupervisorList(
+                request.employeeSupervisorList()
         );
+
+        employeeCreator.createFromEmployeeSupervisorList(new CreateEmployeeDTO(request.employeeSupervisorList()));
 
         return new ResponseHierarchyDTO(hierarchy.toString());
     }
 
-    private Hierarchy createHierarchyFromEmployeeSupervisorList(Map<String, String> employeeSupervisorList){
+    private Hierarchy createFromEmployeeSupervisorList(Map<String, String> employeeSupervisorList) {
         Employee firstEmployee = new Employee(new EmployeeName(getFirstEmployeeName(employeeSupervisorList)));
         Hierarchy hierarchy = new Hierarchy(firstEmployee);
 

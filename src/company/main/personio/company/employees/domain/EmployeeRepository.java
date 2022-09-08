@@ -1,8 +1,10 @@
 package personio.company.employees.domain;
 
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface EmployeeRepository {
-    public void save(Employee employee);
+    public Employee save(Employee employee);
 
     public Employee search(EmployeeId id);
 

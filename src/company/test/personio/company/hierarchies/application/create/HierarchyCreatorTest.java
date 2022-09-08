@@ -8,14 +8,17 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import personio.company.employees.application.create.EmployeeCreator;
 import personio.company.hierarchies.application.ResponseHierarchyDTO;
 
-public final class HierarchyCreatorTest {
+import static org.mockito.Mockito.mock;
+
+public class HierarchyCreatorTest {
     private HierarchyCreator creator;
 
     @BeforeEach
     protected void setUp() {
-        creator = new HierarchyCreator();
+        creator = new HierarchyCreator(mock(EmployeeCreator.class));
     }
 
     @Test
