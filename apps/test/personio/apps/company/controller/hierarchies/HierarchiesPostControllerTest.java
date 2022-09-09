@@ -1,10 +1,14 @@
 package personio.apps.company.controller.hierarchies;
 
 import personio.apps.RequestTestCase;
+
 import org.junit.jupiter.api.Test;
+
+import org.springframework.security.test.context.support.WithMockUser;
 
 class HierarchiesPostControllerTest extends RequestTestCase {
     @Test
+    @WithMockUser(username = "user", password = "password", roles = "USER")
     void create_new_hierarchy() throws Exception {
         assertRequestWithBody(
                 "POST",
@@ -16,6 +20,7 @@ class HierarchiesPostControllerTest extends RequestTestCase {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "password", roles = "USER")
     void create_new_hierarchy_disordered_json() throws Exception {
         assertRequestWithBody(
                 "POST",
@@ -27,6 +32,7 @@ class HierarchiesPostControllerTest extends RequestTestCase {
     }
 
     @Test
+    @WithMockUser(username = "user", password = "password", roles = "USER")
     void create_new_hierarchy_duplicated_information_json() throws Exception {
         assertRequestWithBody(
                 "POST",
