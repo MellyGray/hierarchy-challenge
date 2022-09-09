@@ -29,7 +29,6 @@ public class HierarchyCreatorTest {
         employeeSupervisorList.put("Nick", "Sophie");
         employeeSupervisorList.put("Sophie", "Jonas");
 
-        System.out.println(employeeSupervisorList);
         CreateHierarchyDTO request = new CreateHierarchyDTO(employeeSupervisorList);
 
         ResponseHierarchyDTO response = creator.create(request);

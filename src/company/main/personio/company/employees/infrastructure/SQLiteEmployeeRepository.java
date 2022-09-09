@@ -1,7 +1,6 @@
 package personio.company.employees.infrastructure;
 
 import java.sql.*;
-import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,7 @@ import personio.company.employees.domain.EmployeeRepository;
 @Repository
 public final class SQLiteEmployeeRepository implements EmployeeRepository {
     private static final String EMPLOYEES_TABLE = "employees";
-
+    
     @Override
     public Employee save(Employee employee) throws RuntimeException {
         try {
@@ -40,10 +39,10 @@ public final class SQLiteEmployeeRepository implements EmployeeRepository {
         try {
             Connection connection = startConnection();
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + EMPLOYEES_TABLE + " WHERE id=\"" + id.value() + "\";");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + EMPLOYEES_TABLE + " WHERE id=" + id.value() + ";");
             
             Employee employee = new Employee(new EmployeeName(rs.getString("name")));
-
+            employee.setId(new EmployeeId(rs.getInt("id")));
             employee.setSupervisorId(new EmployeeId(rs.getInt("supervisor")));
 
             rs.close();
